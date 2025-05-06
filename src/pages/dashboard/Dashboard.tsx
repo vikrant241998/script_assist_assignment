@@ -9,7 +9,8 @@ import icon from "../../assest/icon.png";
 import logo_primary from "../../assest/logo_primary.png";
 
 export default function Dashboard() {
-  const logout = useAuthStore((state) => state.logout);
+  const storeLogout = useAuthStore((state) => state.logout);
+
   const [userName, setUserName] = useState("User");
   const navigate = useNavigate();
 
@@ -18,22 +19,30 @@ export default function Dashboard() {
   const [currentRange, setCurrentRange] = useState<[number, number] | null>(null);
   const { data, error, isLoading } = useRickAndMortyData();
 
-
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("currentUser") || "{}");
-    if (user?.firstName && user?.lastName) {
-      setUserName(`${user.firstName} ${user.lastName}`);
+    const currentUserData = localStorage.getItem("currentUser");
+    if (currentUserData) {
+      try {
+        const user = JSON.parse(currentUserData);
+        if (user?.firstName && user?.lastName) {
+          setUserName(`${user.firstName} ${user.lastName}`);
+        } else if (user?.firstName) {
+          setUserName(user.firstName);
+        }
+      } catch (e) {
+      }
     }
   }, []);
 
 
   const handleLogout = () => {
-    logout();
-    navigate("/");
+    useAuthStore.getState().logout(); 
+    window.location.href = '/login'; 
   };
 
   if (isLoading) return <div>Loading...</div>;
   if (error instanceof Error) return <div>Error: {error.message}</div>;
+  if (!data) return <div>No data available. Loading or an issue occurred.</div>;
 
   const handleRowClick = (id: number) => {
     navigate(`/details/${id}`);
@@ -41,15 +50,17 @@ export default function Dashboard() {
 
   //Search Filter
   const filteredData =
-    data?.filter((character: any) => {
-      const term = searchTerm.toLowerCase();
-      return (
-        character.title.toLowerCase().includes(term) ||
-        character.original_title_romanised?.toLowerCase().includes(term) ||
-        character.director.toLowerCase().includes(term) ||
-        character.release_date.toLowerCase().includes(term)
-      );
-    }) || [];
+  data?.filter((character: any) => {
+    const term = searchTerm.toLowerCase();
+    return (
+      character.title?.toLowerCase().includes(term) ||
+      character.original_title_romanised?.toLowerCase().includes(term) ||
+      character.director?.toLowerCase().includes(term) ||
+      character.release_date?.toLowerCase().includes(term)
+    );
+  }) || [];
+
+
 
   //Sort the filtered data
   const sortedData = [...filteredData].sort((a, b) => {
@@ -60,10 +71,11 @@ export default function Dashboard() {
     return 0;
   });
 
+
   //Range Filter (AFTER sort)
   const finalData = sortedData.filter((_, index) => {
     if (!currentRange) return true;
-    const itemNumber = index + 1;
+    const itemNumber = index + 1; // Assuming 1-based indexing for display
     return itemNumber >= currentRange[0] && itemNumber <= currentRange[1];
   });
 
@@ -71,9 +83,7 @@ export default function Dashboard() {
   const handleSort = (order: "asc" | "desc") => {
     setSortOrder(order);
   };
-
-
-  
+ 
 
   return (
     <>
@@ -119,22 +129,19 @@ export default function Dashboard() {
           </Dropdown>
 
           <Dropdown>
-            <Dropdown.Toggle id="dropdown-basic" className="drop-btn">
+            <Dropdown.Toggle id="dropdown-filter" className="drop-btn"> {/* Unique ID */}
               Filter
             </Dropdown.Toggle>
             <Dropdown.Menu className="drop-menu">
-              <Dropdown.Item onClick={() => setCurrentRange([1, 10])}>
-                1 - 10
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => setCurrentRange([11, 20])}>
-                11 - 20
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => setCurrentRange([21, 30])}>
-                21 - 30
-              </Dropdown.Item>
+              <Dropdown.Item onClick={() => setCurrentRange([1, 10])}>1 - 10</Dropdown.Item>
+              <Dropdown.Item onClick={() => setCurrentRange([11, 20])}>11 - 20</Dropdown.Item>
+              <Dropdown.Item onClick={() => setCurrentRange([21, 30])}>21 - 30</Dropdown.Item>
+              <Dropdown.Item onClick={() => setCurrentRange(null)} style={{backgroundColor:'darkslateblue', color:'#ffffff'}}>Clear Filter</Dropdown.Item> {/* Option to clear range filter */}
             </Dropdown.Menu>
           </Dropdown>
         </div>
+
+
         <span className="name-display" data-aos="fade-down"
      data-aos-easing="linear"
      data-aos-duration="1500">Welcome: {userName}</span> {/* Display user's full name */}
@@ -161,13 +168,11 @@ export default function Dashboard() {
             {finalData && finalData.length > 0 ? (
               finalData.map((character: any, index: number) => (
                 <tr key={character.id} style={{ cursor: "pointer" }}>
-                  <td>
-                    {currentRange
-                      ? currentRange[0] + index
-                      : sortOrder === "desc"
-                      ? finalData.length - index
-                      : index + 1}
+                 <td>
+                    {currentRange ? currentRange[0] + index : (sortOrder === "desc" ? sortedData.length - index : index + 1)}
                   </td>
+
+
                   <td onClick={() => handleRowClick(character.id)}>
                     <img
                       src={character.image}

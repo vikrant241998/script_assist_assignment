@@ -20,8 +20,6 @@ export default function Signup() {
   };
 
   const handleSignup = () => {
-    localStorage.setItem("currentUser", JSON.stringify({ firstName, lastName }));
-
     if (!firstName || !lastName || !email || !pass || !confirmPass) {
       alert("Please fill all fields.");
       return;
@@ -44,7 +42,10 @@ export default function Signup() {
       password: pass,
     };
 
-    const existingUsers = JSON.parse(localStorage.getItem("users") || "[]");
+    const existingUsersData = localStorage.getItem("users");
+    const existingUsers = existingUsersData
+      ? JSON.parse(existingUsersData)
+      : [];
 
     const userExists = existingUsers.find((user: any) => user.email === email);
     if (userExists) {
@@ -55,90 +56,95 @@ export default function Signup() {
     const updatedUsers = [...existingUsers, newUser];
     localStorage.setItem("users", JSON.stringify(updatedUsers));
 
-    alert("Signup successful!");
+    alert("Signup successful! Please login.");
     setFirstName("");
     setLastName("");
     setEmail("");
     setPass("");
     setConfirmPass("");
-    navigate("/");
+    navigate("/login");
   };
 
   return (
     <>
-   <div className="bg-banner">
-      <div className="login-wrapper">
-        <div className="logo-contain">
-          <img src={logo} alt="logo" />
-          <h2>Welcome To Signup Page</h2>
+      <div className="bg-banner">
+        <div className="login-wrapper">
+          <div className="logo-contain">
+            <img src={logo} alt="logo" />
+            <h2>Welcome To Signup Page</h2>
+          </div>
+
+          <TextInput
+            className="log-input"
+            label="First Name"
+            placeholder="your first name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.currentTarget.value)}
+          />
+
+          <TextInput
+            className="log-input"
+            label="Last Name"
+            placeholder="your last name"
+            value={lastName}
+            onChange={(e) => setLastName(e.currentTarget.value)}
+          />
+
+          <TextInput
+            className="log-input"
+            label="Email"
+            placeholder="your@email.com"
+            value={email}
+            onChange={(e) => setEmail(e.currentTarget.value)}
+          />
+
+          <TextInput
+            className="log-input"
+            label="Password"
+            placeholder="your password"
+            type={showPassword ? "text" : "password"}
+            value={pass}
+            onChange={(e) => setPass(e.currentTarget.value)}
+            rightSection={
+              <ActionIcon
+                onClick={() => setShowPassword((prev) => !prev)}
+                sx={{ "&:hover": { backgroundColor: "transparent" } }}
+              >
+                {showPassword ? "👁‍🗨" : "👁"}
+              </ActionIcon>
+            }
+          />
+
+          <TextInput
+            className="log-input"
+            label="Confirm Password"
+            placeholder="Confirm password"
+            type={showPassword ? "text" : "password"}
+            value={confirmPass}
+            onChange={(e) => setConfirmPass(e.currentTarget.value)}
+            rightSection={
+              <ActionIcon
+                onClick={() => setShowPassword((prev) => !prev)}
+                sx={{ "&:hover": { backgroundColor: "transparent" } }}
+              >
+                {showPassword ? "👁‍🗨" : "👁"}
+              </ActionIcon>
+            }
+          />
+
+          <Button fullWidth mt="md" onClick={handleSignup}>
+            Signup
+          </Button>
+          <Button
+            variant="subtle"
+            fullWidth
+            mt="sm"
+            onClick={() => navigate("/login")}
+          >
+            Already have an account? Login
+          </Button>
         </div>
-
-        <TextInput
-          className="log-input"
-          label="First Name"
-          value={firstName}
-          onChange={(e) => setFirstName(e.currentTarget.value)}
-        />
-
-        <TextInput
-          className="log-input"
-          label="Last Name"
-          value={lastName}
-          onChange={(e) => setLastName(e.currentTarget.value)}
-        />
-
-        <TextInput
-          className="log-input"
-          label="Email"
-          value={email}
-          onChange={(e) => setEmail(e.currentTarget.value)}
-        />
-
-        <TextInput
-          className="log-input"
-          label="Password"
-          type={showPassword ? "text" : "password"}
-          value={pass}
-          onChange={(e) => setPass(e.currentTarget.value)}
-          rightSection={
-            <ActionIcon
-              onClick={() => setShowPassword((prev) => !prev)}
-              sx={{ "&:hover": { backgroundColor: "transparent" } }}
-            >
-              {showPassword ? "👁‍🗨" : "👁"}
-            </ActionIcon>
-          }
-        />
-
-        <TextInput
-          className="log-input"
-          label="Confirm Password"
-          type={showPassword ? "text" : "password"}
-          value={confirmPass}
-          onChange={(e) => setConfirmPass(e.currentTarget.value)}
-          rightSection={
-            <ActionIcon
-              onClick={() => setShowPassword((prev) => !prev)}
-              sx={{ "&:hover": { backgroundColor: "transparent" } }}
-            >
-              {showPassword ? "👁‍🗨" : "👁"}
-            </ActionIcon>
-          }
-        />
-
-        <Button fullWidth mt="md" onClick={handleSignup}>
-          Signup
-        </Button>
-        <Button
-          variant="subtle"
-          fullWidth
-          mt="sm"
-          onClick={() => navigate("/")}
-        >
-          Already have an account? Login
-        </Button>
       </div>
-    </div>
     </>
   );
 }

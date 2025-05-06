@@ -2,7 +2,6 @@ import { StrictMode } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import CharacterDetails from "./pages/dashboard/CharacterDetails";
-
 import ReactDOM from "react-dom/client";
 import DataEnrichment from "./pages/dashboard/DataEnrichment";
 import App from "./App";
@@ -10,18 +9,41 @@ import Login from "./pages/loginPage/Login";
 import Signup from "./pages/loginPage/Signup";
 import Dashboard from "./pages/dashboard/Dashboard";
 import PrivateRoute from "./routes/PrivateRoute";
-
+import PublicRoute from "./routes/PublicRoute";
+import NotFoundPage from "./pages/NotFoundPage";
 
 export const routes = [
   {
     path: "/",
     element: <App />,
     children: [
-      { path: "/", element: <Login /> },
-      { path: "/login", element: <Login /> },
-      { path: "/signup", element: <Signup /> },
+      {
+        index: true,
+        element: (
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        ),
+      },
 
-      // ✅ Protected routes
+      {
+        path: "/login",
+        element: (
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        ),
+      },
+
+      {
+        path: "/signup",
+        element: (
+          <PublicRoute>
+            <Signup />
+          </PublicRoute>
+        ),
+      },
+
       {
         path: "/dashboard",
         element: (
@@ -30,6 +52,7 @@ export const routes = [
           </PrivateRoute>
         ),
       },
+
       {
         path: "/details/:id",
         element: (
@@ -38,6 +61,7 @@ export const routes = [
           </PrivateRoute>
         ),
       },
+
       {
         path: "/enrichment/:id",
         element: (
@@ -49,7 +73,7 @@ export const routes = [
 
       {
         path: "*",
-        element: <div>404 - Page Not Found</div>,
+        element: <NotFoundPage />,
       },
     ],
   },

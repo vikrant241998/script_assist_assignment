@@ -1,7 +1,8 @@
 .dash-handler {
   position: sticky;
   top: 0;
-  background-color: #d9e8ff;
+  /* background-color: #d9e8ff; */
+  background-color: red;
   height: 110px;
 }
 
