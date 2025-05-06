@@ -1,0 +1,136 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.enrich-container {
+  width: 100%;
+  max-width: 90%;
+  margin: auto;
+}
+
+.enrich-banner {
+  width: 100%;
+  height: 600px;
+  margin-top: 1rem;
+}
+
+.enrich-container img {
+  height: 100%;
+  width: 100%;
+  border-radius: 15px;
+}
+
+.enrich-heading {
+  text-align: center;
+  padding: 20px 0px;
+  font-size: 45px;
+  text-transform: uppercase;
+  color: #232f53;
+  word-spacing: 5px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.enrich-heading-text {
+  padding: 10px 5px;
+  font-size: 25px;
+  text-transform: uppercase;
+  color: black;
+  margin: 0;
+  font-weight: 600;
+}
+
+.card-wrap {
+  background-color: #232f53 !important;
+  color: #ffffff !important;
+  cursor: pointer;
+  border-radius: 15px !important;
+  transition: transform 0.4s ease, box-shadow 0.4s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.card-wrap:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.card-wrap::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: rgba(70, 129, 238, 0.3);
+  transform: rotate(45deg);
+  animation: none;
+  pointer-events: none;
+}
+
+.card-wrap:hover::before {
+  animation: shine 1.5s infinite linear;
+}
+
+/* Shine animation */
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(45deg);
+  }
+}
+
+.card-title {
+  text-align: center;
+  text-transform: uppercase;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+.card-text {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 10px;
+}
+
+.enrich-para-align {
+  text-align: end;
+  padding: 0;
+  margin: 0;
+}
+
+/* Media Quries Start From Here */
+@media only screen and (max-width: 1024px) {
+  .enrich-banner {
+    height: auto;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .enrich-heading {
+    font-size: 40px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .enrich-heading {
+    padding: 25px 0px;
+    font-size: 35px;
+    text-align: center;
+  }
+
+  .enrich-heading-text {
+    padding: 5px;
+    font-size: 20px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .enrich-heading {
+    font-size: 30px;
+  }
+}

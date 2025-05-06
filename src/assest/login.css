@@ -1,0 +1,82 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+.bg-banner {
+  width: 100%;
+  min-height: 100vh;
+  background-image: url(../assest//login_bg.png);
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-wrapper {
+    width: 600px;
+    /* height: 100%; */
+    padding: 35px 40px;
+    background-color: #ffff;
+    border-radius: 5px;
+    margin: 15px 0px;
+}
+
+.login-wrapper h2 {
+  font-size: 34px;
+}
+
+.log-input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.log-input .mantine-TextInput-input {
+  padding: 20px 10px;
+  border-radius: 5px !important;
+  border: 1px solid #dee2e6;
+  background-color: #f1f3f5 !important;
+  font-size: 16px;
+  outline: none;
+}
+
+.log-input .mantine-TextInput-input:focus {
+  background-color: #f1f3f5 !important;
+  border-color: #dee2e6 !important;
+}
+.log-input label {
+  color: black;
+}
+.log-input input::placeholder {
+  font-size: 16px;
+  color: grey;
+}
+
+.logo-contain {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-contain img {
+  width: 200px;
+}
+
+
+@media only screen and (max-width: 500px) {
+    .login-wrapper h2 {
+        font-size: 24px;
+    }
+    .logo-contain img {
+        width: 170px;
+    }    
+    .login-wrapper {
+        margin: 15px;
+    }
+}
